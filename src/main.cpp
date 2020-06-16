@@ -24,7 +24,7 @@ String hexColor;
 
 bool boot = false;
 
-void callback(char *topic, byte *payload, unsigned int length) //callback includes topic and payload ( from which (topic) the payload is comming)
+void callback(char *topic, byte *payload, unsigned int length)
 {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -70,6 +70,11 @@ void callback(char *topic, byte *payload, unsigned int length) //callback includ
     }
   }
 }
+void requestData()
+{
+  Serial.println("Control");
+  client.publish("device/control", "{\"id\" : \"" DEVICEID "\",\"param\" : \"\",\"value\" : \"\",\"intent\" : \"request\"}");
+}
 void reconnect()
 {
   while (!client.connected())
@@ -89,6 +94,7 @@ void reconnect()
       delay(5000);
     }
   }
+  requestData();
 }
 void connectmqtt()
 {
@@ -103,6 +109,7 @@ void connectmqtt()
     {
       reconnect();
     }
+    requestData();
   }
 }
 void setup()
